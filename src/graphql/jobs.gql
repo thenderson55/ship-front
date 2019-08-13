@@ -1,0 +1,9 @@
+
+query jobs{
+  jobs {
+    id
+    cities {
+      name
+    }
+  }
+}
