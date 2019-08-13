@@ -3,19 +3,23 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <Apollo/>
     <SignUp/>
+    <CreateTwoot/>
   </div>
 </template>
 
 <script>
 import Apollo from './components/Apollo.vue'
 import SignUp from './components/SignUp.vue'
+import CreateTwoot from './components/CreateTwoot.vue';
+
 
 export default {
   name: 'app',
   components: {
     // ApolloExample
     Apollo,
-    SignUp
+    SignUp,
+    CreateTwoot
   }
 }
 </script>
