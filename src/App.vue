@@ -4,6 +4,7 @@
     <Apollo/>
     <SignUp/>
     <CreateTwoot/>
+    <LogIn/>
   </div>
 </template>
 
@@ -11,6 +12,7 @@
 import Apollo from './components/Apollo.vue'
 import SignUp from './components/SignUp.vue'
 import CreateTwoot from './components/CreateTwoot.vue';
+import LogIn from './components/LogIn.vue'
 
 
 export default {
@@ -19,7 +21,8 @@ export default {
     // ApolloExample
     Apollo,
     SignUp,
-    CreateTwoot
+    CreateTwoot,
+    LogIn
   }
 }
 </script>

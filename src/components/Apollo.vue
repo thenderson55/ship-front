@@ -48,6 +48,14 @@ export default {
     };
   },
   apollo: {
+    me: gql`query {
+        me {
+          email
+          id
+        }
+      } 
+    `,
+
     // Simple query that will update the 'hello' vue property
     // jobs: gql`
     //   query {
