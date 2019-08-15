@@ -1,5 +1,0 @@
-query twoots{
-  twoots{
-    id
-  }
-}

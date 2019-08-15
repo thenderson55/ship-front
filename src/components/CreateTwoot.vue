@@ -12,8 +12,6 @@
 
 <script>
 import gql from "graphql-tag";
-console.log('yay')
-// import { SIGNUP_MUTATION } from "../graphql"
 
 export default {
   name: "CreateTwoot",
@@ -53,35 +51,8 @@ export default {
         })
     }
   },
-  // apollo: 
-  //   signUpMutation: gql`
-  //     mutation signUpMutation($email: String!, $password:String!){
-  //       createUser(
-  //         authProvider: {
-  //           email: {
-  //             email: $email
-  //             password: $password
-  //           }
-  //         }
-  //       ){ 
-  //         email
-  //         id
-  //       }
-  //  
-  //   `,
-  //   twoots: gql`
-  //     query {
-  //       twoots {
-  //         content
-  //       }
-  //     }
-  //   `,
-    
-  // },
-
 };
 
-// console.log(hello)
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

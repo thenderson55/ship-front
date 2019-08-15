@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <Apollo/>
+    <Twoots/>
     <SignUp/>
     <CreateTwoot/>
     <LogIn/>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Apollo from './components/Apollo.vue'
+import Twoots from './components/Twoots.vue'
 import SignUp from './components/SignUp.vue'
 import CreateTwoot from './components/CreateTwoot.vue';
 import LogIn from './components/LogIn.vue'
@@ -18,8 +18,7 @@ import LogIn from './components/LogIn.vue'
 export default {
   name: 'app',
   components: {
-    // ApolloExample
-    Apollo,
+    Twoots,
     SignUp,
     CreateTwoot,
     LogIn
