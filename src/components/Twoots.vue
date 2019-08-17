@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="body">
     <div v-for="twoot in twoots" :key="twoot.id">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
-          <span>{{twoot.content}}</span>
+          <span>{{twoot.user.email}}</span>
           <el-button style="float: right; padding: 3px 0" type="text">Delete</el-button>
         </div>
-        <div  class="text item">
-          {{twoot.id}}
+        <div class="text item">
+          {{twoot.content}}
         </div>
       </el-card>
     </div>
@@ -31,56 +31,72 @@ export default {
       query {
         twoots {
           content
+          id 
+          user {
+            email
+          }
         }
       }
     `,
     
   },
+  methods () {
+
+  },
 
   // Optional Vanilla JS way
   mounted() {
-    fetch("http://localhost:3000/graphql/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `
-            query{
-              twoots{
-                  content
-                  id
-                }
-            }
-          `
-      })
-    })
-      .then(res => {
-        console.log(res);
-        return res.json();
-      })
-      .then(res => {
-        console.log(res.data.twoots);
-        this.twootss = res.data.twoots
-      });
+    // fetch("http://localhost:3000/graphql/", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     query: `
+    //         query{
+    //           twoots{
+    //               content
+    //               id
+    //               user {
+    //                   email
+    //                 }
+    //             }
+    //         }
+    //       `
+    //   })
+    // })
+    //   .then(res => {
+    //     return res.json();
+    //   })
+    //   .then(res => {
+    //     this.twootss = res.data.twoots
+    //   });
   }
 };
+
 
 // console.log(hello)
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.text {
+  font-size: 14px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.item {
+  margin-bottom: 18px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
 }
-a {
-  color: #42b983;
+.clearfix:after {
+  clear: both
+}
+
+.box-card {
+  width: 480px;
+  margin-bottom: 10px;
 }
 </style>

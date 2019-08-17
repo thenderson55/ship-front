@@ -1,28 +1,17 @@
 <template>
   <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <!-- <Twoots/> -->
+    <NavBar/>
     <router-view></router-view>
-    <!-- <SignUp/> -->
-    <!-- <CreateTwoot/> -->
-    <!-- <LogIn/> -->
   </div>
 </template>
 
 <script>
-import Twoots from './components/Twoots.vue'
-import SignUp from './components/SignUp.vue'
-import CreateTwoot from './components/CreateTwoot.vue';
-import LogIn from './components/LogIn.vue'
-
+import NavBar from './layout/NavBar.vue'
 
 export default {
   name: 'App',
   components: {
-    Twoots,
-    SignUp,
-    CreateTwoot,
-    LogIn
+    NavBar
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <CreateTwoot/>
     <Twoots/>
   </div>
@@ -19,3 +19,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
+
