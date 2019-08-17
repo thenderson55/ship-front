@@ -1,6 +1,8 @@
 <template>
   <div>
     <form method="POST" @submit.prevent="signup" action="">
+      <!-- <label for="">Username</label>
+      <input type="username" v-model="username" name="" id=""> -->
       <label for="">Email</label>
       <input type="email" v-model="email" name="" id="">
       <label for="">Password</label>
@@ -17,6 +19,7 @@ export default {
   name: "SignUp",
   data() {
     return {
+      // username: '',
       email: '',
       password: ''
     };
@@ -36,6 +39,7 @@ export default {
           variables: { 
             data: {
               email: {
+                // username: this.username,
                 email: this.email,
                 password: this.password
               }       

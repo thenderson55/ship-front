@@ -1,6 +1,7 @@
 <template>
   <div>
     <form action="POST" @submit.prevent="login">
+      <!-- <input type="username" v-model="username" placeholder="Username"> -->
       <input type="email" v-model="email" placeholder="Email">
       <input type="password" v-model="password" placeholder="Password">
       <button type="submit">Log In</button>
@@ -16,6 +17,7 @@ export default {
   data () {
     return {
       email: '',
+      // username: '',
       password: ''
     }
   },
@@ -27,11 +29,16 @@ export default {
               email: $data)
               {
               token
+              user {
+                email
+                id
+              }
             }
           }
         `,
         variables: {
-          data: {  
+          data: { 
+            // username: this.username, 
             email: this.email,
             password: this.password 
           }
@@ -39,7 +46,9 @@ export default {
       })
       .then(res => {
         console.log(res.data.signinUser.token)
+        console.log(res.data.signinUser.user.email)
         onLogin(this.$apollo.provider.defaultClient, res.data.signinUser.token )
+        this.$router.push('/')
         })
       .catch(err => console.log(err))
     }

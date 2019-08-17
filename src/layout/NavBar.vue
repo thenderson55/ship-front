@@ -16,6 +16,7 @@
       </el-submenu>
       <el-menu-item index="3" disabled>Info</el-menu-item>
       <el-menu-item index="4"><a href="'/'" target="_blank">Home</a></el-menu-item>
+      <el-button v-on:click="logOut" style="float: right; padding: 3px 0" type="text">Logout</el-button>
     </el-menu>
     <div class="line"></div>
   </div>
@@ -23,6 +24,7 @@
 
 
 <script>
+  import { onLogout } from '../vue-apollo'
   export default {
     data() {
       return {
@@ -33,6 +35,9 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      logOut() {
+        onLogout(this.$apollo.provider.defaultClient)
       }
     }
   }
