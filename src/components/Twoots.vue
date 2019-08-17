@@ -1,6 +1,5 @@
 <template>
-  <div class="body">
-    <div v-for="twoot in twoots" :key="twoot.id">
+    <!-- <div v-for="twoot in twoots" :key="twoot.id">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{twoot.user.email}}</span>
@@ -11,8 +10,15 @@
         </div>
 
       </el-card>
+    </div> -->
+
+    <div class="wrapper">  
+      <div class="form-group input-group" v-for="twoot in twoots" :key="twoot.id">
+        <p class="form-control" rows="3">{{twoot.content}}</p>
+       
+        <span class="btn-s btn-primary" v-on:click="follow(twoot.user.email, 2)">{{twoot.user.email}}</span>
+      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -107,7 +113,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.text {
+.wrapper {
+  width: 70%;
+  margin: 0;
+  padding:0;
+}
+span {
+  width: 127px;
+  display: inline-flex;
+  align-items: center;
+  padding-left: 10px;
+}
+/* .text {
   font-size: 14px;
 }
 
@@ -127,5 +144,5 @@ export default {
 .box-card {
   width: 480px;
   margin-bottom: 10px;
-}
+} */
 </style>

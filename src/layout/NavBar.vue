@@ -1,24 +1,16 @@
 <template>
-  <div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">Twotter</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">Workspace</template>
-        <el-menu-item index="2-1">item one</el-menu-item>
-        <el-menu-item index="2-2">item two</el-menu-item>
-        <el-menu-item index="2-3">item three</el-menu-item>
-        <el-submenu index="2-4">
-          <template slot="title">item four</template>
-          <el-menu-item index="2-4-1">item one</el-menu-item>
-          <el-menu-item index="2-4-2">item two</el-menu-item>
-          <el-menu-item index="2-4-3">item three</el-menu-item>
-        </el-submenu>
-      </el-submenu>
-      <el-menu-item index="3" disabled>Info</el-menu-item>
-      <el-menu-item index="4"><a href="'/'" target="_blank">Home</a></el-menu-item>
-      <el-button v-on:click="logOut" style="float: right; padding: 3px 0" type="text">Logout</el-button>
-    </el-menu>
-    <div class="line"></div>
+  <div class="nav-bar">
+    <ul class="nav justify-content-end">
+      <li class="nav-item mr-auto">
+        <router-link class="nav-link" to="/">Twotter</router-link>
+      </li>
+      <li class="nav-item ">
+        <router-link  class="nav-link float-right" to="/login">Log in</router-link>
+      </li>
+      <li class="nav-item ">
+        <button v-on:click="logOut" class="btn nav-link ">Log out</button>    
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -42,3 +34,10 @@
     }
   }
 </script>
+
+<style>
+.nav-bar {
+  margin-bottom: 40px;
+}
+
+</style>
