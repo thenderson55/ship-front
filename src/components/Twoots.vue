@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div v-for="example in examples">{{example.name}}</div>
-    <div v-for="twoot in twoots">{{twoot.content}}</div>
+    <div v-for="twoot in twoots" :key="twoot.id">
+      <el-card class="box-card" shadow="never">
+        <div slot="header" class="clearfix">
+          <span>{{twoot.content}}</span>
+          <el-button style="float: right; padding: 3px 0" type="text">Delete</el-button>
+        </div>
+        <div  class="text item">
+          {{twoot.id}}
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
