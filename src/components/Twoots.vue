@@ -4,11 +4,12 @@
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>{{twoot.user.email}}</span>
-          <el-button style="float: right; padding: 3px 0" type="text">Delete</el-button>
+          <el-button v-on:click="follow(twoot.user.email, 2)" style="float: right; padding: 3px 0" type="text">Delete</el-button>
         </div>
         <div class="text item">
           {{twoot.content}}
         </div>
+
       </el-card>
     </div>
   </div>
@@ -23,7 +24,8 @@ export default {
     return {
       msg: "Welcome to Your p",
       examples: [{ name: "Tommy" }, { name: "Bob" }],
-      twootss: []
+      email: '',
+      userId: ''
     };
   },
   apollo: {
@@ -40,8 +42,35 @@ export default {
     `,
     
   },
-  methods () {
-
+  methods: {
+    hello(){
+      console.log('hello')
+    },
+    follow (email, userId) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+          mutation ($email: String!, $userId: Int!){
+            createFollowing( 
+              email: $email,
+              userId: $userId
+             ){ 
+              email
+            }
+          }`,
+          variables: { 
+            email: email,
+            userId: userId
+          }
+        })
+        .then(res => {
+          console.log(res.data)
+          })
+        .catch(err => {
+          console.log(err)
+          alert("Nooo")
+        })
+    }
   },
 
   // Optional Vanilla JS way
