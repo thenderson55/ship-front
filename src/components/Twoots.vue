@@ -16,7 +16,11 @@
       <div class="form-group input-group" v-for="twoot in twoots" :key="twoot.id">
         <p class="form-control" rows="3">{{twoot.content}}</p>
        
-        <span class="btn-s btn-primary" v-on:click="follow(twoot.user.email, 2)">{{twoot.user.email}}</span>
+        <p class="btn-s btn-primary name" v-on:click="follow(twoot.user.email, 2)">
+          {{twoot.user.email}}
+          <span>Hello</span>
+          <button class="btn-s btn-success unfollow">Unfollow</button>
+        </p>
       </div>
     </div>
 </template>
@@ -115,14 +119,26 @@ export default {
 <style scoped>
 .wrapper {
   width: 70%;
+  height: 20%;
   margin: 0;
   padding:0;
+  flex-wrap: wrap
 }
-span {
+p{
+  height: 85px;
+}
+.name {
   width: 127px;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding-left: 10px;
+}
+
+.unfollow {
+  border-radius: 0px;
+  width: 100%;
+  margin-bottom: -7px;
 }
 /* .text {
   font-size: 14px;

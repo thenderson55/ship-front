@@ -11,7 +11,7 @@
       <form method="POST" @submit.prevent="createtwoot">
         
         <div class="form-group input-group">
-          <textarea class="form-control" v-model="content" rows="3"></textarea>
+          <textarea class="form-control" v-model="content" :maxlength="max" rows="3"></textarea>
           <div class="input-group-append">
             <span class="input-group-text" v-text="(max - content.length)"></span>
           </div>
