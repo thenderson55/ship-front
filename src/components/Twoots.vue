@@ -19,40 +19,55 @@
         <p class="btn-s btn-primary name" v-on:click="follow(twoot.user.email, 2)">
           {{twoot.user.email}}
           <span>Hello</span>
-          <button class="btn-s btn-success unfollow">Unfollow</button>
+          <button class="btn-s btn-success unfollow" v-text="unfollow"></button>
         </p>
       </div>
+      <button v-on:click="twooty">HH</button>
+
+      <div v-for="tweet in allTweets" :key="tweet.id">
+        <p>{{tweet.content}}</p>
+      </div> 
+      <p>{{user}}</p>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import gql from "graphql-tag";
 
 export default {
-  name: "Apollo",
+  name: "Twoots",
+  computed:{
+    ...mapGetters(['allTweets', 'user']),
+  },  
   data() {
     return {
-      msg: "Welcome to Your p",
-      examples: [{ name: "Tommy" }, { name: "Bob" }],
       email: '',
-      userId: ''
+      userId: '',
+      unfollow: 'Unfollow',
+      twoots: ''
     };
   },
-  apollo: {
-    twoots: gql`
-      query {
-        twoots {
-          content
-          id 
-          user {
-            email
-          }
-        }
-      }
-    `,
+  // apollo: {
+  //   twoots: gql`
+  //     query {
+  //       twoots {
+  //         content
+  //         id 
+  //         user {
+  //           email
+  //         }
+  //       }
+  //     }
+  //   `,
     
-  },
+  // },
   methods: {
+    twooty(){
+      console.log(this.twoots)
+      console.log(this.user)
+
+    }, 
     hello(){
       console.log('hello')
     },
@@ -82,32 +97,54 @@ export default {
         })
     }
   },
-
   // Optional Vanilla JS way
   mounted() {
-    // fetch("http://localhost:3000/graphql/", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     query: `
-    //         query{
-    //           twoots{
-    //               content
-    //               id
-    //               user {
-    //                   email
-    //                 }
-    //             }
-    //         }
-    //       `
-    //   })
-    // })
-    //   .then(res => {
-    //     return res.json();
-    //   })
-    //   .then(res => {
-    //     this.twootss = res.data.twoots
-    //   });
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+            query{
+              twoots{
+                  content
+                  id
+                  user {
+                      email
+                    }
+                }
+            }
+          `
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      this.twoots = res.data.twoots
+    }),
+
+    this.hello(),
+
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+            query getFollowingList($id: Int!){
+              followingsByUserId(userId: $id){
+                  email
+                }
+            }`,
+            variables: { id: this.user },
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log('l', res)
+      // this.twoots = res.data.twoots
+    })
   }
 };
 
