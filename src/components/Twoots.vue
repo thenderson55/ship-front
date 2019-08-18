@@ -4,10 +4,10 @@
       <div class="form-group input-group" v-for="twoot in allTwoots" :key="twoot.id">
         <p class="form-control" rows="3">{{twoot.content}}</p>
        
-        <p class="btn-s btn-primary name" v-on:click="follow(twoot.user.email, 2)">
+        <p class="btn-s btn-primary name" >
           {{twoot.user.email}}
           <span>{{twoot.id}}</span>
-          <button class="btn-s btn-success unfollow" v-text="unfollow"></button>
+          <button  v-on:click="() => addNewFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
         </p>
       </div>
       <p>{{allTwoots.length}}</p>
@@ -49,7 +49,12 @@ export default {
     
   // },
   methods: {
-    ...mapActions(['fetchTwoots']),
+    ...mapActions(['fetchTwoots', 'addFollowing']),
+    addNewFollowing(email){
+      this.addFollowing(email)
+      // To reset textare content
+      // this.$refs.myDiv.value = ""
+    },
 
     follow (email) {
       this.$apollo

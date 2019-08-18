@@ -1,5 +1,5 @@
 const state = {
-  user: 2,
+  user: 3,
   followingList: "",
   twoots: "",
   followersTwoots: ""
@@ -61,9 +61,9 @@ const actions = {
 
     // Find all twoots whose email matches the email of the people current user follows
     twoots.forEach(twoot => {
+      console.log(twoot.content);
       list.forEach(el => {
         if (el.email == twoot.user.email) {
-          console.log(twoot.content);
           followersTwoots.push(twoot);
         }
       });
@@ -74,7 +74,48 @@ const actions = {
     commit("setFollowersTwoots", followersTwoots);
   },
 
-  async addFollowing({ commit }, email) {},
+  async addFollowing({ commit }, email) {
+    state.followingList.forEach(el => {
+      if(Object.values(el).includes(email) && Object.values(el).includes(state.user)){
+        console.log('already following')
+      }
+    })
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+              mutation AddNewFollowing($email: String!, $userId: Int!){
+                createFollowing(email: $email, userId: $userId){
+                    email
+                  }
+              }`,
+        variables: {
+          email: email,
+          userId: state.user
+        }
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      // const content = res.data.createTwoot.content;
+      // const email = res.data.createTwoot.user.email;
+      // const id = res.data.createTwoot.id;
+      // const newTwoot = {
+      //   content,
+      //   id,
+      //   user: { email }
+      // };
+      // commit('newTwoot', newTwoot)
+      console.log(res.data.createFollowing.email)
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Nooo");
+    });
+  },
 
   async createTwoot({ commit }, content) {
     fetch("http://localhost:3000/graphql/", {
