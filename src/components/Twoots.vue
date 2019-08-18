@@ -13,7 +13,7 @@
     </div> -->
 
     <div class="wrapper">  
-      <div class="form-group input-group" v-for="twoot in twoots" :key="twoot.id">
+      <div class="form-group input-group" v-for="twoot in allTwoots" :key="twoot.id">
         <p class="form-control" rows="3">{{twoot.content}}</p>
        
         <p class="btn-s btn-primary name" v-on:click="follow(twoot.user.email, 2)">
@@ -22,30 +22,32 @@
           <button class="btn-s btn-success unfollow" v-text="unfollow"></button>
         </p>
       </div>
+      <p>{{allTwoots.length}}</p>
+      <p>{{followersTwoots.length}}</p>
       <button v-on:click="twooty">HH</button>
-
-      <div v-for="tweet in allTweets" :key="tweet.id">
-        <p>{{tweet.content}}</p>
-      </div> 
       <p>{{user}}</p>
+      <p>{{followingList[0].email}}</p>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import gql from "graphql-tag";
 
 export default {
   name: "Twoots",
   computed:{
-    ...mapGetters(['allTweets', 'user']),
-  },  
+    ...mapGetters(['allTwoots', 'user', 'followingList', 'followersTwoots'])
+  }, 
+  created(){
+    this.fetchTwoots()
+  }, 
   data() {
     return {
       email: '',
       userId: '',
       unfollow: 'Unfollow',
-      twoots: ''
+      followList: '',
     };
   },
   // apollo: {
@@ -63,9 +65,14 @@ export default {
     
   // },
   methods: {
+    ...mapActions(['fetchTwoots']),
+
     twooty(){
-      console.log(this.twoots)
+      console.log(this.allTwoots)
       console.log(this.user)
+      // this.twoots.forEach(twoot => {
+      //   console.log(twoot)
+      // })
 
     }, 
     hello(){
@@ -99,30 +106,6 @@ export default {
   },
   // Optional Vanilla JS way
   mounted() {
-    fetch("http://localhost:3000/graphql/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `
-            query{
-              twoots{
-                  content
-                  id
-                  user {
-                      email
-                    }
-                }
-            }
-          `
-      })
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      this.twoots = res.data.twoots
-    }),
-
     this.hello(),
 
     fetch("http://localhost:3000/graphql/", {
@@ -142,9 +125,14 @@ export default {
       return res.json();
     })
     .then(res => {
-      console.log('l', res)
-      // this.twoots = res.data.twoots
-    })
+      console.log('l', res.data.followingsByUserId)
+      this.followList = res.data.followingsByUserId
+      console.log(this.twoots)
+    }),
+
+    this.twooty()
+    console.log('ll',this.allTwoots)
+
   }
 };
 
