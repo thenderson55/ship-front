@@ -42,6 +42,7 @@ const actions = {
               query getFollowingList($id: Int!){
                 followingsByUserId(userId: $id){
                     email
+                    id
                   }
               }`,
           variables: { id: state.user }
@@ -106,6 +107,48 @@ const actions = {
     })
     .then(res => {
       console.log(res.data.createFollowing.email)
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Nooo");
+    });
+  },
+
+  async deleteFollowing({ commit }, email) {
+    let contains = true
+    let followingId = ""
+    state.followingList.forEach(el => {
+      if(el.email == email){
+        followingId = el.id
+        contains = false
+        return
+      } 
+    })
+    if(contains) {
+      return
+    }
+    console.log(followingId)
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+              mutation DeleteFollowing($id: ID!){
+                destroyFollowing(id: $id){
+                    email
+                  }
+              }`,
+        variables: {
+          id: followingId
+        }
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log(res)
+      // console.log(res.data.destroyFollowing.email)
     })
     .catch(err => {
       console.log(err);

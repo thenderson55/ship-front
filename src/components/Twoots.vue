@@ -7,7 +7,7 @@
         <p class="btn-s btn-primary name" >
           {{twoot.user.email}}
           <span>{{twoot.id}}</span>
-          <button  v-on:click="() => addNewFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
+          <button  v-on:click="() => removeFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
         </p>
       </div>
       <p>{{allTwoots.length}}</p>
@@ -31,7 +31,7 @@ export default {
   }, 
   data() {
     return {
-      unfollow: 'Follow',
+      unfollow: 'Unfollow',
     };
   },
   // apollo: {
@@ -49,9 +49,9 @@ export default {
     
   // },
   methods: {
-    ...mapActions(['fetchTwoots', 'addFollowing']),
-    addNewFollowing(email){
-      this.addFollowing(email)
+    ...mapActions(['fetchTwoots', 'deleteFollowing']),
+    removeFollowing(email){
+      this.deleteFollowing(email)
       // To reset textare content
       // this.$refs.myDiv.value = ""
     },
