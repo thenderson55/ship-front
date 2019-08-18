@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import SignUp from './components/SignUp.vue'
 import LogIn from './components/LogIn.vue'
 import Home from './Home.vue'
+import AllTwoots from './components/AllTwoots.vue'
 import store from './store'
 
 Vue.use(VueRouter)
@@ -14,6 +15,7 @@ const routes = [
   {path:'/', component: Home},
   {path:'/signup', component: SignUp},
   {path:'/login', component: LogIn},
+  {path:'/alltwoots', component: AllTwoots}
 ]
 
 const router =  new VueRouter({

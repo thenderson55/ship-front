@@ -5,6 +5,9 @@
         <router-link class="nav-link" to="/">Twotter</router-link>
       </li>
       <li class="nav-item ">
+        <router-link  class="nav-link float-right" to="/alltwoots">All Twoots</router-link>
+      </li>
+      <li class="nav-item ">
         <router-link  class="nav-link float-right" to="/login">Log in</router-link>
       </li>
       <li class="nav-item ">

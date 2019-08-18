@@ -1,7 +1,8 @@
 <template>
+  <div class="body">
 
     <div class="wrapper">  
-      <div class="form-group input-group" v-for="twoot in followersTwoots" :key="twoot.id">
+      <div class="form-group input-group" v-for="twoot in allTwoots" :key="twoot.id">
         <p class="form-control" rows="3">{{twoot.content}}</p>
        
         <p class="btn-s btn-primary name" >
@@ -11,10 +12,9 @@
         </p>
       </div>
       <p>{{allTwoots.length}}</p>
-      <p>{{followersTwoots.length}}</p>
       <p>{{user}}</p>
-      <p>{{followingList[0].email}}</p>
     </div>
+  </div>
 </template>
 
 <script>
@@ -52,35 +52,33 @@ export default {
     ...mapActions(['fetchTwoots', 'addFollowing']),
     addNewFollowing(email){
       this.addFollowing(email)
-      // To reset textare content
-      // this.$refs.myDiv.value = ""
-    },
-
-    follow (email) {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-          mutation ($email: String!, $userId: Int!){
-            createFollowing( 
-              email: $email,
-              userId: $userId
-             ){ 
-              email
-            }
-          }`,
-          variables: { 
-            email: email,
-            userId: this.user
-          }
-        })
-        .then(res => {
-          console.log(res.data)
-          })
-        .catch(err => {
-          console.log(err)
-          alert("Nooo")
-        })
     }
+
+    // follow (email) {
+    //   this.$apollo
+    //     .mutate({
+    //       mutation: gql`
+    //       mutation ($email: String!, $userId: Int!){
+    //         createFollowing( 
+    //           email: $email,
+    //           userId: $userId
+    //          ){ 
+    //           email
+    //         }
+    //       }`,
+    //       variables: { 
+    //         email: email,
+    //         userId: this.user
+    //       }
+    //     })
+    //     .then(res => {
+    //       console.log(res.data)
+    //       })
+    //     .catch(err => {
+    //       console.log(err)
+    //       alert("Nooo")
+    //     })
+    // }
   }
 };
 
@@ -88,6 +86,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .wrapper {
   width: 70%;
   height: 20%;
@@ -111,6 +116,7 @@ p{
   width: 100%;
   margin-bottom: -7px;
 }
+
 /* .text {
   font-size: 14px;
 }

@@ -1,8 +1,8 @@
 const state = {
   user: 3,
-  followingList: "",
-  twoots: "",
-  followersTwoots: ""
+  followingList: [],
+  twoots: [],
+  followersTwoots: []
 };
 
 const getters = {
@@ -153,34 +153,6 @@ const actions = {
       alert("Nooo");
     });
   }
-
-  // async fetchTwoots({commit}) {
-  //   await fetch("http://localhost:3000/graphql/", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       query: `
-  //           query{
-  //             twoots{
-  //                 content
-  //                 id
-  //                 user {
-  //                     email
-  //                   }
-  //               }
-  //           }
-  //         `
-  //     })
-  //   })
-  //   .then(res => {
-  //     return res.json();
-  //   })
-  //   .then(res => {
-  //     console.log('vuex', res.data.twoots)
-  //     commit('setTwoots', res.data.twoots )
-  //     // this.twoots = res.data.twoots
-  //   })
-  // }
 };
 
 const mutations = {
