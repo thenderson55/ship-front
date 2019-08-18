@@ -75,11 +75,16 @@ const actions = {
   },
 
   async addFollowing({ commit }, email) {
+    let contains = false
     state.followingList.forEach(el => {
-      if(Object.values(el).includes(email) && Object.values(el).includes(state.user)){
-        console.log('already following')
-      }
+      if(el.email == email){
+        contains = true
+        return
+      } 
     })
+    if(contains) {
+      return
+    }
     fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -100,15 +105,6 @@ const actions = {
       return res.json();
     })
     .then(res => {
-      // const content = res.data.createTwoot.content;
-      // const email = res.data.createTwoot.user.email;
-      // const id = res.data.createTwoot.id;
-      // const newTwoot = {
-      //   content,
-      //   id,
-      //   user: { email }
-      // };
-      // commit('newTwoot', newTwoot)
       console.log(res.data.createFollowing.email)
     })
     .catch(err => {
