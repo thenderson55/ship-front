@@ -8,7 +8,7 @@
 
           <div class="name" >
             <router-link to="/" class="link">
-              <img class="avatar">
+              <img :src="`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 30) + 1}.jpg`" class="avatar">
               {{twoot.user.email}}
             </router-link>
           </div>
@@ -40,8 +40,7 @@ export default {
     ...mapActions(['fetchTwoots', 'addFollowing']),
     addNewFollowing(email){
       this.addFollowing(email)
-    }
-
+    },
     // follow (email) {
     //   this.$apollo
     //     .mutate({
@@ -100,10 +99,11 @@ p{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: blue;
+  background-color: blue; 
 }
 
 .name:hover {
+  background-color: darkblue;
 }
 
 .link {
@@ -112,7 +112,6 @@ p{
 }
 
 .link:hover {
-  background-color: darkblue;
   text-decoration: none; 
 }
 
