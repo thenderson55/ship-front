@@ -1,29 +1,16 @@
-# front-one
 
-## Project setup
+To run app:
+
+clone and cd into repositiory
+
+in console:
 ```
 yarn install
-```
 
-### Compiles and hot-reloads for development
+yarn serve
 ```
-yarn run serve
-```
+app will run on  http://localhost:8080/
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+this app connects with a rails API back-end at https://github.com/thenderson55/ship-back
 
-### Run your tests
-```
-yarn run test
-```
 
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
