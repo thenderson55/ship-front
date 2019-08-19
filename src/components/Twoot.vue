@@ -1,0 +1,78 @@
+<template>
+  <div class="form-group input-group twoot">
+    <p class="form-control content" rows="3">{{twoot.content}}</p>
+    <div>
+      <div class="name" >
+        <router-link :to="`/profile/${twoot.user.id}`" class="link">
+          <img src="https://randomuser.me/api/portraits/men/4.jpg" class="avatar">
+          {{twoot.user.id}}
+          {{twoot.user.email}}
+        </router-link>
+      </div>
+      <button  v-on:click="() => followFunction(twoot.user.email)" class="btn-s btn-success follow" v-text="buttonText"></button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Twoot",
+  props: {
+    twoot: Object,
+    buttonText: String,
+    followFunction: Function
+  },
+
+}
+</script>
+
+<style >
+.content {
+  height: 100px;
+}
+.name {
+  margin:0!;
+  padding:0!;
+  width: 127px;
+  height: 71px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-top-right-radius: 3px;
+  background-color: RGB(5, 123, 247); 
+}
+.name:hover {
+  color: white;
+  background-color: RGB(5, 123, 230);
+}
+
+.link {
+  text-align: center;
+  color: white;
+}
+.link:hover {
+  text-decoration: none; 
+}
+
+.follow {
+  border-radius: 0px;
+  border-bottom-right-radius: 3px;
+  width: 100%;
+  margin-bottom: -7px;
+}
+.avatar {  
+  width: 40px;
+  height: 40px;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(71, 81, 93);
+  border-image: initial;
+  border-radius: 50%;
+}
+
+</style>

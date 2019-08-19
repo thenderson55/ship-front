@@ -1,14 +1,16 @@
 const state = {
-  user: 3,
+  user: 2,
   followingList: [],
   twoots: [],
-  followersTwoots: []
+  followersTwoots: [],
+  twootsById: []
 };
 
 const getters = {
   allTwoots: state => state.twoots,
   followingList: state => state.followingList,
-  followersTwoots: state => state.followersTwoots
+  followersTwoots: state => state.followersTwoots,
+  twootsById: state => state.twootsById
 };
 
 const actions = {
@@ -108,6 +110,7 @@ const actions = {
       return res.json();
     })
     .then(res => {
+      console.log('yooooo')
       console.log(res.data.createFollowing.email)
     })
     .catch(err => {
@@ -197,7 +200,42 @@ const actions = {
       console.log(err);
       alert("Nooo");
     });
-  }
+  },
+
+  async getTwootsById({ commit }, userId) {
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          query GetTwootsById($userId: Int!){
+            twoot(userId: $userId){
+                content
+                id
+                user {
+                    email
+                    id
+                    username
+                  }
+              }
+          }`,
+        variables: {
+          userId: parseInt(userId)
+        }
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log(res.data.twoot[0].content)
+      commit('twootsById', res.data.twoot)
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Nooo");
+    });
+  },
 };
 
 const mutations = {
@@ -206,7 +244,8 @@ const mutations = {
     (state.followingList = followingList),
   setFollowersTwoots: (state, followersTwoots) =>
     (state.followersTwoots = followersTwoots),
-  newTwoot: (state, twoot) => state.twoots.unshift(twoot)
+  newTwoot: (state, twoot) => state.twoots.unshift(twoot),
+  twootsById: (state, twootsById) => (state.twootsById = twootsById),
 };
 
 export default {

@@ -1,21 +1,23 @@
 <template>
   <div class="body">
-    <Twoot class="wrapper" v-for="twoot in allTwoots" :twoot="twoot" :buttonText="buttonText" :followFunction="addNewFollowing" :key="twoot.id"/>    
+    <CreateTwoot/>
+    <br>
+    <Twoot class="wrapper" v-for="twoot in followersTwoots" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
+    <p>Current user: {{user}}</p>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Twoot from './Twoot.vue'
+import CreateTwoot from'./CreateTwoot.vue'
 import gql from "graphql-tag";
 
-// For random img each rerender
-// :src="`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 30) + 1}.jpg`"
-
 export default {
-  name: "Twoots",
+  name: "TwootsHome",
   components: {
     Twoot,
+    CreateTwoot
   },
   computed:{
     ...mapGetters(['allTwoots', 'user', 'followingList', 'followersTwoots'])
@@ -25,14 +27,29 @@ export default {
   }, 
   data() {
     return {
-      buttonText: 'Follow',
+      buttonText: 'Unfollow',
     };
   },
+  // apollo: {
+  //   twoots: gql`
+  //     query {
+  //       twoots {
+  //         content
+  //         id 
+  //         user {
+  //           email
+  //         }
+  //       }
+  //     }
+  //   `,
+    
+  // },
   methods: {
-    ...mapActions(['fetchTwoots', 'addFollowing']),
-    addNewFollowing(email){
-      this.addFollowing(email)
+    ...mapActions(['fetchTwoots', 'deleteFollowing']),
+    removeFollowing(email){
+      this.deleteFollowing(email)
     },
+
     // follow (email) {
     //   this.$apollo
     //     .mutate({
@@ -64,6 +81,17 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style>
+.body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper {
+  width: 70%;
+  margin-bottom: 10px;
+  padding:0;
+}
 </style>
