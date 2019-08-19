@@ -10,10 +10,7 @@
           <button  v-on:click="() => removeFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
         </p>
       </div>
-      <p>{{allTwoots.length}}</p>
-      <p>{{followersTwoots.length}}</p>
-      <p>{{user}}</p>
-      <p>{{followingList[0].email}}</p>
+      <p>Current user: {{user}}</p>
     </div>
 </template>
 

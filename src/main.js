@@ -7,7 +7,9 @@ import LogIn from './components/LogIn.vue'
 import Home from './Home.vue'
 import AllTwoots from './components/AllTwoots.vue'
 import store from './store'
+// import { LinkPlugin } from 'bootstrap-vue'
 
+// Vue.use(LinkPlugin)
 Vue.use(VueRouter)
 Vue.config.productionTip = false
 

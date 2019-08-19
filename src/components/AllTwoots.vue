@@ -4,15 +4,17 @@
     <div class="wrapper">  
       <div class="form-group input-group" v-for="twoot in allTwoots" :key="twoot.id">
         <p class="form-control" rows="3">{{twoot.content}}</p>
-       
-        <p class="btn-s btn-primary name" >
-          {{twoot.user.email}}
-          <span>{{twoot.id}}</span>
+        <div>
+
+          <div class="name" >
+            <router-link to="/" class="link">
+              <img class="avatar">
+              {{twoot.user.email}}
+            </router-link>
+          </div>
           <button  v-on:click="() => addNewFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
-        </p>
+        </div>
       </div>
-      <p>{{allTwoots.length}}</p>
-      <p>{{user}}</p>
     </div>
   </div>
 </template>
@@ -34,20 +36,6 @@ export default {
       unfollow: 'Follow',
     };
   },
-  // apollo: {
-  //   twoots: gql`
-  //     query {
-  //       twoots {
-  //         content
-  //         id 
-  //         user {
-  //           email
-  //         }
-  //       }
-  //     }
-  //   `,
-    
-  // },
   methods: {
     ...mapActions(['fetchTwoots', 'addFollowing']),
     addNewFollowing(email){
@@ -101,14 +89,31 @@ export default {
   flex-wrap: wrap
 }
 p{
-  height: 85px;
+  height: 100px;
 }
 .name {
+  margin:0!;
+  padding:0!;
   width: 127px;
+  height: 71px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: blue;
+}
+
+.name:hover {
+}
+
+.link {
+  text-align: center;
+  color: white;
+}
+
+.link:hover {
+  background-color: darkblue;
+  text-decoration: none; 
 }
 
 .unfollow {
@@ -117,25 +122,17 @@ p{
   margin-bottom: -7px;
 }
 
-/* .text {
-  font-size: 14px;
+.avatar {  
+  width: 40px;
+  height: 40px;
+  z-index: 1;
+  position: relative;
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(71, 81, 93);
+  border-image: initial;
+  border-radius: 50%;
 }
 
-.item {
-  margin-bottom: 18px;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix:after {
-  clear: both
-}
-
-.box-card {
-  width: 480px;
-  margin-bottom: 10px;
-} */
 </style>
