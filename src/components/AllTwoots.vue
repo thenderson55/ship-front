@@ -7,8 +7,8 @@
         <div>
 
           <div class="name" >
-            <router-link to="/" class="link">
-              <img :src="`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 30) + 1}.jpg`" class="avatar">
+            <router-link :to="`/profile/${twoot.user.id}`" class="link">
+              <img src="https://randomuser.me/api/portraits/men/4.jpg" class="avatar">
               {{twoot.user.email}}
             </router-link>
           </div>
@@ -22,6 +22,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import gql from "graphql-tag";
+
+// For random img each rerender
+// :src="`https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 30) + 1}.jpg`"
 
 export default {
   name: "Twoots",

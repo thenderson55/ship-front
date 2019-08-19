@@ -7,6 +7,7 @@ import LogIn from './components/LogIn.vue'
 import Home from './Home.vue'
 import AllTwoots from './components/AllTwoots.vue'
 import store from './store'
+import Profile from './components/Profile.vue'
 // import { LinkPlugin } from 'bootstrap-vue'
 
 // Vue.use(LinkPlugin)
@@ -17,7 +18,8 @@ const routes = [
   {path:'/', component: Home},
   {path:'/signup', component: SignUp},
   {path:'/login', component: LogIn},
-  {path:'/alltwoots', component: AllTwoots}
+  {path:'/alltwoots', component: AllTwoots},
+  {path: '/profile/:id', component: Profile }
 ]
 
 const router =  new VueRouter({

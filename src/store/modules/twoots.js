@@ -26,6 +26,8 @@ const actions = {
                     id
                     user {
                         email
+                        id
+                        username
                       }
                   }
               }
