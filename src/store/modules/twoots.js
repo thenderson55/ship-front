@@ -20,7 +20,8 @@ const getters = {
   allTwoots: state => state.allTwoots,
   followingList: state => state.followingList,
   twootsById: state => state.twootsById,
-  user: state => state.user
+  user: state => state.user,
+  userEmail: state => state.userEmail
 
 };
 

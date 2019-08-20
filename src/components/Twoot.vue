@@ -3,21 +3,27 @@
   <div class="form-group input-group twoot">
     <p class="form-control content" rows="3">{{twoot.content}}</p>
     <div>
-      <div class="name" >
+      <div class="name" v-bind:class="{ 'center-avatar' : twoot.user.email == userEmail}" >
         <router-link :to="`/profile/${twoot.user.id}`" class="link">
           <img src="https://randomuser.me/api/portraits/men/4.jpg" class="avatar">
           {{twoot.user.id}}
           {{twoot.user.email}}
         </router-link>
       </div>
-      <button  v-on:click="() => followFunction(twoot.user.email)" class="btn-s btn-success follow" v-text="buttonText"></button>
+      <button v-if="twoot.user.email !== userEmail" v-on:click="() => followFunction(twoot.user.email)" class="btn-s btn-success follow" v-text="buttonText"></button>
+      <button v-else v-on:click="() => followFunction(twoot.user.email)" class="disable" :disabled="true"></button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: "Twoot",
+  computed:{
+    ...mapGetters(['userEmail'])
+  }, 
   props: {
     twoot: Object,
     buttonText: String,
@@ -74,6 +80,14 @@ export default {
   border-color: rgb(71, 81, 93);
   border-image: initial;
   border-radius: 50%;
+}
+
+.center-avatar {
+  height: 100px
+}
+
+.disable {
+  display: none;
 }
 
 </style>
