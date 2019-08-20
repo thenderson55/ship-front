@@ -33,6 +33,7 @@
       },
       logOut() {
         onLogout(this.$apollo.provider.defaultClient)
+        this.$router.push('/login')
       }
     }
   }

@@ -1,17 +1,5 @@
 <template>
   <div class="body">
-    <!-- <div class="wrapper">
-    <form method="POST" @submit="onSubmit">       
-      <div class="form-group input-group">
-        <textarea class="form-control" v-model="content" :maxlength="max" rows="3" ref="myDiv"></textarea>
-        <div class="input-group-append">
-          <span class="input-group-text" v-text="(max - content.length)"></span>
-        </div>
-        <button type="submit" class="btn-s btn-primary">Twoot it!</button>
-      </div>
-    </form>
-  </div> -->
-
     <CreateTwoot/>
     <br>
     <Twoot class="wrapper" v-for="twoot in myFeed" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
@@ -36,6 +24,7 @@ export default {
     ...mapGetters(['user','myFeed' ])
   }, 
   created(){
+    
     this.fetchTwoots()
     this.getUserTwoots()
   }, 

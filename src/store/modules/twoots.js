@@ -1,5 +1,9 @@
+
 const state = {
-  user: 2,
+  // isLoggedIn: !localStorage.getItem(“apollo-token”),
+  user: 3,
+  userEmail:'kate@kate.com',
+  userToken: '',
   followingList: [],
   followingEmailList: [],
   allTwoots: [],
@@ -62,6 +66,7 @@ const actions = {
         return res.json();
       })
     ]);
+    console.log(localStorage.getItem("id"))
     // Get the array of data once all Promises have succeeded
     const twoots = data[0].data.twoots;
     twoots.sort(function(a, b) { 
@@ -86,14 +91,22 @@ const actions = {
 
 
   // ADD an email to following list
-
   async addFollowing({ commit }, email) {
     console.log('add', email)
     console.log('add',state.followingEmailList)
-    const checkList = state.followingEmailList.filter(el => el == email)
-    if(checkList.length > 0) return 
+    // const checkList = state.followingEmailList.filter(el => el == email)
+    // if(checkList.length > 0) return 
+    if(state.followingEmailList.includes(email)) {
+      console.log('inlcudes email')
+      return
+    }
+    // Can't follow self
+    if(email == state.userEmail) {
+      console.log('cant follow yourself')
+      return
+    }
 
-    fetch("http://localhost:3000/graphql/", {
+    await fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -126,13 +139,12 @@ const actions = {
 
 
   // DELETE email from following list
-
   async deleteFollowing({ commit }, email) {
     console.log('del', email)
     console.log('del',state.followingEmailList)
     if(!state.followingEmailList.includes(email)) return 
     
-    fetch("http://localhost:3000/graphql/", {
+    await fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -155,7 +167,11 @@ const actions = {
       console.log(res)
       console.log(res.data.destroyFollowing.email)
       const deletedEmail = res.data.destroyFollowing.email
+      const updatedFollowingTwoots = state.followersTwoots.filter(twoot => {
+        return twoot.user.email != deletedEmail
+      })
       commit('removeFromEmailList', deletedEmail)
+      commit('updateTwoots', updatedFollowingTwoots)
     })
     .catch(err => {
       console.log(err);
@@ -163,127 +179,9 @@ const actions = {
   },
 
 
-
-  //NNNNNNN
-  // Add a new person to user following list
-  // async addFollowing({ commit }, email) {
-  //   let contains = false
-  //   state.followingList.forEach(el => {
-  //     if(el.email == email){
-  //       contains = true
-  //       return
-  //     } 
-  //   })
-  //   if(contains) {
-  //     return
-  //   }
-  //   fetch("http://localhost:3000/graphql/", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       query: `
-  //             mutation AddNewFollowing($email: String!, $userId: Int!){
-  //               createFollowing(email: $email, userId: $userId){
-  //                   email
-  //                 }
-  //             }`,
-  //       variables: {
-  //         email: email,
-  //         userId: state.user
-  //       }
-  //     })
-  //   })
-  //   .then(res => {
-  //     return res.json();
-  //   })
-  //   .then(res => {
-  //     console.log('yooooo')
-  //     console.log(res.data.createFollowing.email)
-  //     const newFollowing = { email: res.data.createFollowing.email, userId: state.user }
-  //     const newFollowingList = state.followingList.push(newFollowing)
-      
-  //     const newFollowersTwoots = [];
-  //     // Find all twoots whose email matches the email of the people current user follows
-  //     state.twoots.forEach(twoot => {
-  //       console.log(twoot.content);
-  //       newFollowingList.forEach(el => {
-  //         if (el.email == twoot.user.email) {
-  //           newFollowersTwoots.push(twoot);
-  //         }
-  //       });
-  //     });
-  //     commit('addToFollowingList', newFollowingList )
-  //     commit('increaseTwootList', newFollowersTwoots )
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
-  // },
-
-  // // Remove someone from users following list
-  // async deleteFollowing({ commit }, email) {
-  //   // let contains = true
-  //   // let followingId = ""
-  //   // state.followingList.forEach(el => {
-  //   //   if(el.email == email){
-  //   //     followingId = el.id
-  //   //     contains = false
-  //   //     return
-  //   //   } 
-  //   // })
-  //   // if(contains) {
-  //   //   return
-  //   // }
-  //   console.log(followingId)
-  //   fetch("http://localhost:3000/graphql/", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       query: `
-  //             mutation DeleteFollowing($id: ID!){
-  //               destroyFollowing(id: $id){
-  //                   email
-  //                 }
-  //             }`,
-  //       variables: {
-  //         id: followingId
-  //       }
-  //     })
-  //   })
-  //   .then(res => {
-  //     return res.json();
-  //   })
-  //   .then(res => {
-  //     console.log(res)
-  //     console.log(res.data.destroyFollowing.email)
-  //     const removedEmail = res.data.destroyFollowing.email
-  //     const updatedList = state.followingList.filter(el => {
-  //       return el.email != removedEmail
-  //     })
-  //     const updatedFollowersTwoots = []
-  //     state.twoots.forEach(twoot => {
-  //       console.log(twoot.content);
-  //       updatedList.forEach(el => {
-  //         if (el.email == twoot.user.email) {
-  //           updatedFollowersTwoots.push(twoot);
-  //         }
-  //       });
-  //     });
-  //     commit( 'removeFromFollowingList', updatedList )
-  //     commit( 'deleteFollowingsTwoots', updatedFollowersTwoots )
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
-  // },
-
-
-
-
-
-
+  // CREATE a twoot and add to my feed
   async createTwoot({ commit }, content) {
-    fetch("http://localhost:3000/graphql/", {
+    await fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -328,8 +226,9 @@ const actions = {
     });
   },
 
+  // GET all the twoots of user from their id to display in profile
   async getTwootsById({ commit }, userId) {
-    fetch("http://localhost:3000/graphql/", {
+    await fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -363,9 +262,10 @@ const actions = {
     });
   },
 
-  // GET all users twoots
+  // GET all current users twoots
   async getUserTwoots({ commit }) {
-    fetch("http://localhost:3000/graphql/", {
+    console.log(state.user)
+    await fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -382,7 +282,7 @@ const actions = {
               }
           }`,
         variables: {
-          userId: state.user
+          userId: parseInt(state.user) 
         }
       })
     })
@@ -398,14 +298,50 @@ const actions = {
       alert("Nooo");
     });
   },
+
+  // GET user info
+  async getUserByEmail({ commit }, email) {
+    await fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          query GetUserId($email: String!){
+            getUserByEmail(email: $email){
+              id
+            }
+          }`,
+          variables: {
+            email
+          }
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log('get suer',res.data.getUserByEmail.id)
+      const currentUserId = res.data.getUserByEmail.id
+      localStorage.setItem("id", currentUserId);
+      commit('setUserId', currentUserId )
+      // console.log(email)
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Nooo");
+    });
+  },
 };
 
 const mutations = {
+  setUserId: (state, user) => (state.user = user),
+
   setTwoots: (state, twoots) => (state.allTwoots = twoots),
   setFollowingEmailList: (state, followingList) =>
   (state.followingEmailList = followingList),
   setFollowersTwoots: (state, followersTwoots) =>
   (state.followersTwoots = followersTwoots),
+  updateTwoots: (state, twoots) => (state.followersTwoots = twoots),
   setMyTwoots: (state, twoots) => (state.myTwoots = twoots),
   updateMyTwoots: (state, myTwoots) => (state.myTwoots = myTwoots),
   twootsById: (state, twootsById) => (state.twootsById = twootsById),
