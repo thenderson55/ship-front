@@ -26,7 +26,6 @@ export default {
       max: 140,
       content: '',
       userId: '',
-      value: "go"
 
     };
     console.log(userId)

@@ -1,8 +1,20 @@
 <template>
   <div class="body">
+    <!-- <div class="wrapper">
+    <form method="POST" @submit="onSubmit">       
+      <div class="form-group input-group">
+        <textarea class="form-control" v-model="content" :maxlength="max" rows="3" ref="myDiv"></textarea>
+        <div class="input-group-append">
+          <span class="input-group-text" v-text="(max - content.length)"></span>
+        </div>
+        <button type="submit" class="btn-s btn-primary">Twoot it!</button>
+      </div>
+    </form>
+  </div> -->
+
     <CreateTwoot/>
     <br>
-    <Twoot class="wrapper" v-for="twoot in followersTwoots" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
+    <Twoot class="wrapper" v-for="twoot in myFeed" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
     <p>Current user: {{user}}</p>
   </div>
 </template>
@@ -12,6 +24,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Twoot from './Twoot.vue'
 import CreateTwoot from'./CreateTwoot.vue'
 import gql from "graphql-tag";
+import { setTimeout } from 'timers';
 
 export default {
   name: "TwootsHome",
@@ -20,13 +33,17 @@ export default {
     CreateTwoot
   },
   computed:{
-    ...mapGetters(['allTwoots', 'user', 'followingList', 'followersTwoots'])
+    ...mapGetters(['user','myFeed' ])
   }, 
   created(){
     this.fetchTwoots()
+    this.getUserTwoots()
   }, 
   data() {
     return {
+      max: 140,
+      content: '',
+      userId: '',
       buttonText: 'Unfollow',
     };
   },
@@ -45,10 +62,16 @@ export default {
     
   // },
   methods: {
-    ...mapActions(['fetchTwoots', 'deleteFollowing']),
+    ...mapActions(['fetchTwoots', 'deleteFollowing', 'createTwoot', 'getUserTwoots']),
     removeFollowing(email){
       this.deleteFollowing(email)
     },
+    // onSubmit(e){
+    //   e.preventDefault()
+    //   this.createTwoot(this.content)
+    //   // To reset textarea content
+    //   this.$refs.myDiv.value = ""
+    // }
 
     // follow (email) {
     //   this.$apollo
@@ -94,4 +117,12 @@ export default {
   margin-bottom: 10px;
   padding:0;
 }
+/* .btn-s {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background-color: RGB(5, 123, 247);
+}
+.btn-s:hover {
+  background-color: RGB(5, 123, 240);
+} */
 </style>

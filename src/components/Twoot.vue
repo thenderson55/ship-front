@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO conditional render if twoot user id equals this.user -->
   <div class="form-group input-group twoot">
     <p class="form-control content" rows="3">{{twoot.content}}</p>
     <div>

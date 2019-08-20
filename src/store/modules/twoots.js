@@ -2,15 +2,19 @@ const state = {
   user: 2,
   followingList: [],
   followingEmailList: [],
-  twoots: [],
+  allTwoots: [],
   followersTwoots: [],
-  twootsById: []
+  twootsById: [],
+  // currentUserTwoots: [],
+  myTwoots: []
 };
 
 const getters = {
-  allTwoots: state => state.twoots,
+  myFeed: state => state.myTwoots.concat(state.followersTwoots).sort(function(a, b) { 
+    return b.id - a.id  
+  }),
+  allTwoots: state => state.allTwoots,
   followingList: state => state.followingList,
-  followersTwoots: state => state.followersTwoots,
   twootsById: state => state.twootsById,
   user: state => state.user
 
@@ -58,7 +62,6 @@ const actions = {
         return res.json();
       })
     ]);
-
     // Get the array of data once all Promises have succeeded
     const twoots = data[0].data.twoots;
     twoots.sort(function(a, b) { 
@@ -66,9 +69,8 @@ const actions = {
     });
     const followingList = data[1].data.followingsByUserId;
     const followingEmails = followingList.map(el => el.email)
-    console.log('fo', followingEmails)
+    console.log('follow email', followingEmails)
     const followersTwoots = [];
-
     // Find all twoots whose email matches the email of the people current user follows
     twoots.forEach(twoot => {
       followingEmails.forEach(el => {
@@ -77,32 +79,20 @@ const actions = {
         }
       });
     });
-
-    
-
     commit("setTwoots", twoots);
     commit("setFollowingEmailList", followingEmails);
     commit("setFollowersTwoots", followersTwoots);
   },
 
 
-  // ADD A FOLLOWING TO FOLLOWING LIST
+  // ADD an email to following list
 
   async addFollowing({ commit }, email) {
-    console.log('kk', email)
-    console.log(state.followingEmailList)
+    console.log('add', email)
+    console.log('add',state.followingEmailList)
     const checkList = state.followingEmailList.filter(el => el == email)
-    if(checkList.length > 0) return false
-    // let contains = false
-    // state.followingList.forEach(el => {
-    //   if(el.email == email){
-    //     contains = true
-    //     return
-    //   } 
-    // })
-    // if(contains) {
-    //   return
-    // }
+    if(checkList.length > 0) return 
+
     fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -134,32 +124,27 @@ const actions = {
     });
   },
 
+
+  // DELETE email from following list
+
   async deleteFollowing({ commit }, email) {
-    let contains = true
-    let followingId = ""
-    state.followingList.forEach(el => {
-      if(el.email == email){
-        followingId = el.id
-        contains = false
-        return
-      } 
-    })
-    if(contains) {
-      return
-    }
-    console.log(followingId)
+    console.log('del', email)
+    console.log('del',state.followingEmailList)
+    if(!state.followingEmailList.includes(email)) return 
+    
     fetch("http://localhost:3000/graphql/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `
-              mutation DeleteFollowing($id: ID!){
-                destroyFollowing(id: $id){
+              mutation DeleteFollowing($email: String!, $userId: Int!){
+                destroyFollowing(email: $email, userId: $userId){
                     email
                   }
               }`,
         variables: {
-          id: followingId
+          email: email,
+          userId: state.user
         }
       })
     })
@@ -168,11 +153,12 @@ const actions = {
     })
     .then(res => {
       console.log(res)
-      // console.log(res.data.destroyFollowing.email)
+      console.log(res.data.destroyFollowing.email)
+      const deletedEmail = res.data.destroyFollowing.email
+      commit('removeFromEmailList', deletedEmail)
     })
     .catch(err => {
       console.log(err);
-      alert("Nooo");
     });
   },
 
@@ -329,7 +315,12 @@ const actions = {
         id,
         user: { email }
       };
-      commit('newTwoot', newTwoot)
+      state.myTwoots.push(newTwoot)
+      // const myFeed = state.currentUserTwoots.concat(state.followersTwoots)
+      state.myTwoots.sort(function(a, b) { 
+        return b.id - a.id  
+      });
+      commit('updateMyTwoots', state.myTwoots)
     })
     .catch(err => {
       console.log(err);
@@ -371,17 +362,55 @@ const actions = {
       alert("Nooo");
     });
   },
+
+  // GET all users twoots
+  async getUserTwoots({ commit }) {
+    fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          query GetTwootsById($userId: Int!){
+            twoot(userId: $userId){
+                content
+                id
+                user {
+                    email
+                    id
+                    username
+                  }
+              }
+          }`,
+        variables: {
+          userId: state.user
+        }
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      console.log(res.data)
+      commit('setMyTwoots', res.data.twoot)
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Nooo");
+    });
+  },
 };
 
 const mutations = {
-  setTwoots: (state, twoots) => (state.twoots = twoots),
+  setTwoots: (state, twoots) => (state.allTwoots = twoots),
   setFollowingEmailList: (state, followingList) =>
-    (state.followingEmailList = followingList),
+  (state.followingEmailList = followingList),
   setFollowersTwoots: (state, followersTwoots) =>
-    (state.followersTwoots = followersTwoots),
-  newTwoot: (state, twoot) => state.twoots.unshift(twoot),
+  (state.followersTwoots = followersTwoots),
+  setMyTwoots: (state, twoots) => (state.myTwoots = twoots),
+  updateMyTwoots: (state, myTwoots) => (state.myTwoots = myTwoots),
   twootsById: (state, twootsById) => (state.twootsById = twootsById),
   addToEmailList: (state, addEmail) => (state.followingEmailList.push(addEmail)),
+  removeFromEmailList: (state, removeEmail) => (state.followingEmailList.splice(removeEmail, 1)),
 };
 
 export default {
