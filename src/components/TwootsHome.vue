@@ -21,13 +21,18 @@ export default {
     CreateTwoot
   },
   computed:{
-    ...mapGetters(['user','myFeed' ])
+    ...mapGetters(['user','myFeed', 'myNewFeed' ])
   }, 
-  created(){
+  mounted(){
     
     this.fetchTwoots()
     this.getUserTwoots()
   }, 
+  // created(){
+    
+  //   this.fetchTwoots()
+  //   this.getUserTwoots()
+  // }, 
   data() {
     return {
       max: 140,

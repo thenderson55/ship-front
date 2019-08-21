@@ -1,6 +1,6 @@
 
 const state = {
-  // isLoggedIn: !localStorage.getItem(“apollo-token”),
+  isLoggedIn: true,
   user: 3,
   userEmail:'kate@kate.com',
   userToken: '',
@@ -10,13 +10,12 @@ const state = {
   followersTwoots: [],
   twootsById: [],
   // currentUserTwoots: [],
-  myTwoots: []
+  myFeed: [],
+  // myFeed: []
 };
 
 const getters = {
-  myFeed: state => state.myTwoots.concat(state.followersTwoots).sort(function(a, b) { 
-    return b.id - a.id  
-  }),
+  myFeed: state => state.myFeed,
   allTwoots: state => state.allTwoots,
   followingList: state => state.followingList,
   twootsById: state => state.twootsById,
@@ -26,6 +25,13 @@ const getters = {
 };
 
 const actions = {
+  toggleLogin({commit}){
+    console.log('toggle')
+    console.log(!state.isLoggedIn)
+    const change = state.isLoggedIn = !state.isLoggedIn
+    commit('toggle', change)
+  },
+
   async fetchTwoots({ commit }) {
     // Need both sets of data to work with after so using Promise.all
     const data = await Promise.all([
@@ -65,27 +71,59 @@ const actions = {
         })
       }).then(res => {
         return res.json();
+      }),
+      fetch("http://localhost:3000/graphql/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `
+          query GetTwootsById($userId: Int!){
+            twoot(userId: $userId){
+                content
+                id
+                user {
+                    email
+                    id
+                    username
+                  }
+              }
+          }`,
+        variables: {
+          userId: parseInt(state.user) 
+        }
       })
+    })
+    .then(res => {
+      return res.json();
+    })
+
+
     ]);
-    console.log(localStorage.getItem("id"))
     // Get the array of data once all Promises have succeeded
-    const twoots = data[0].data.twoots;
-    twoots.sort(function(a, b) { 
+    const myTwoots = data[2].data.twoot
+    const allTwoots = data[0].data.twoots;
+    allTwoots.sort(function(a, b) { 
       return b.id - a.id  
     });
     const followingList = data[1].data.followingsByUserId;
     const followingEmails = followingList.map(el => el.email)
-    console.log('follow email', followingEmails)
     const followersTwoots = [];
     // Find all twoots whose email matches the email of the people current user follows
-    twoots.forEach(twoot => {
+    allTwoots.forEach(twoot => {
       followingEmails.forEach(el => {
         if (el == twoot.user.email) {
           followersTwoots.push(twoot);
         }
       });
     });
-    commit("setTwoots", twoots);
+
+    // Create ordered list for home feed of user twoots and following twoots
+    const homeList = followersTwoots.concat(myTwoots).sort(function(a, b) { 
+      return b.id - a.id  
+    })
+
+    commit("setFeed", homeList)
+    commit("setTwoots", allTwoots);
     commit("setFollowingEmailList", followingEmails);
     commit("setFollowersTwoots", followersTwoots);
   },
@@ -165,13 +203,15 @@ const actions = {
       return res.json();
     })
     .then(res => {
-      console.log(res)
-      console.log(res.data.destroyFollowing.email)
       const deletedEmail = res.data.destroyFollowing.email
       const updatedFollowingTwoots = state.followersTwoots.filter(twoot => {
         return twoot.user.email != deletedEmail
       })
+      const updatedFeed = state.myFeed.filter(twoot => {
+        return twoot.user.email != deletedEmail
+      })
       commit('removeFromEmailList', deletedEmail)
+      commit('updateFeed', updatedFeed)
       commit('updateTwoots', updatedFollowingTwoots)
     })
     .catch(err => {
@@ -263,43 +303,6 @@ const actions = {
     });
   },
 
-  // GET all current users twoots
-  async getUserTwoots({ commit }) {
-    console.log(state.user)
-    await fetch("http://localhost:3000/graphql/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `
-          query GetTwootsById($userId: Int!){
-            twoot(userId: $userId){
-                content
-                id
-                user {
-                    email
-                    id
-                    username
-                  }
-              }
-          }`,
-        variables: {
-          userId: parseInt(state.user) 
-        }
-      })
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(res => {
-      console.log(res.data)
-      commit('setMyTwoots', res.data.twoot)
-    })
-    .catch(err => {
-      console.log(err);
-      alert("Nooo");
-    });
-  },
-
   // GET user info
   async getUserByEmail({ commit }, email) {
     await fetch("http://localhost:3000/graphql/", {
@@ -336,6 +339,7 @@ const actions = {
 
 const mutations = {
   setUserId: (state, user) => (state.user = user),
+  toggle: (state, toggle) => (state.isLoggedIn = toggle),
 
   setTwoots: (state, twoots) => (state.allTwoots = twoots),
   setFollowingEmailList: (state, followingList) =>
@@ -343,7 +347,8 @@ const mutations = {
   setFollowersTwoots: (state, followersTwoots) =>
   (state.followersTwoots = followersTwoots),
   updateTwoots: (state, twoots) => (state.followersTwoots = twoots),
-  setMyTwoots: (state, twoots) => (state.myTwoots = twoots),
+  setFeed: (state, feed) => (state.myFeed = feed),
+  updateFeed: (state, feed) => (state.myFeed = feed),
   updateMyTwoots: (state, myTwoots) => (state.myTwoots = myTwoots),
   twootsById: (state, twootsById) => (state.twootsById = twootsById),
   addToEmailList: (state, addEmail) => (state.followingEmailList.push(addEmail)),

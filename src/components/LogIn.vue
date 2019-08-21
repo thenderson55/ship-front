@@ -11,7 +11,7 @@
 
     <!-- </form> -->
   <!-- </div> -->
-  <div>
+  <div class="container">
     <h2>Login</h2>
     <form @submit.prevent="login">
         <div class="form-group">
@@ -39,10 +39,6 @@ import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 import { onLogin } from '../vue-apollo'
 
-let vm = new Vue({
-
-  })
-
 export default {
   name: "Login",
   data () {
@@ -54,21 +50,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logIn', 'helle', 'yo', 'setSignedInState', 'getUserByEmail', 'getUserTwoots']),
+    ...mapActions(['logIn', 'toggleLogin', 'setSignedInState', 'getUserByEmail', 'getUserTwoots']),
     oi(email, id, token){
       console.log('yoyoyo')
       this.yo()
       this.setSignedInState(email, id, token)
     },
+    toggleStatus(){
+      this.toggle()
+    },
     handleSubmit (e) {
-            // this.submitted = true;
-            const { email, password } = this;
-            if (email && password) {
-                this.logIn({ email, password })
-            }
-            // this.$router.push('/')
-
-        },
+        const { email, password } = this;
+        if (email && password) {
+            this.logIn({ email, password })
+        }
+    },
     // logIn(){
     //   // e.preventDefault()
     //   this.logIn(this.email, this.password)
@@ -99,8 +95,6 @@ export default {
       })
       .then(res => {
         console.log(this.username)
-        this.oi()
-        this.helle()
         this.username = res.data.signinUser.token
         console.log(this.username)
         const token = res.data.signinUser.token
@@ -114,9 +108,10 @@ export default {
         // console.log('username',res.data.signinUser.user.username)
         onLogin(this.$apollo.provider.defaultClient, res.data.signinUser.token )
         // Login.signIn(email, id, token)
+        this.toggleLogin()
         setTimeout(() => {
           this.$router.push('/')
-        }, 1000)
+        }, 10)
         })
       .catch(err => console.log(err))
     }
