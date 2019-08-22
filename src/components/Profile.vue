@@ -1,21 +1,7 @@
 <template>
   <div class="body">
+    <h5>{{username}}'s twoots</h5>
     <Twoot class="wrapper" v-for="twoot in twootsById" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
-    <!-- <div class="wrapper">  
-      <div class="form-group input-group" v-for="twoot in twootsById" :key="twoot.id">
-        <p class="form-control content" rows="3">{{twoot.content}}</p>
-        <div>
-          <div class="name" >
-            <router-link :to="`/profile/${twoot.user.id}`" class="link">
-              <img src="https://randomuser.me/api/portraits/men/4.jpg" class="avatar">
-              {{twoot.user.id}}
-              {{twoot.user.email}}
-            </router-link>
-          </div>
-          <button  v-on:click="() => addNewFollowing(twoot.user.email)" class="btn-s btn-success unfollow" v-text="unfollow"></button>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -31,7 +17,7 @@ export default {
   },
   name: "Profile",
   computed:{
-    ...mapGetters(['twootsById', 'user'])
+    ...mapGetters(['twootsById', 'user', 'username'])
   }, 
   created(){
     this.getTwootsById(this.$props.id)

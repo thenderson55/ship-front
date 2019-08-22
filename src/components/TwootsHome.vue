@@ -1,5 +1,6 @@
 <template>
   <div class="body">
+    <h5>My Feed</h5>
     <CreateTwoot/>
     <br>
     <Twoot class="wrapper" v-for="twoot in myFeed" :twoot="twoot" :buttonText="buttonText" :followFunction="removeFollowing" :key="twoot.id"/>  
@@ -98,7 +99,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style >
 .body {
   margin: 0;
   padding: 0;
@@ -108,8 +109,10 @@ export default {
 }
 .wrapper {
   width: 70%;
-  margin-bottom: 10px;
-  padding:0;
+}
+
+h5 {
+  margin-bottom: 20px;
 }
 /* .btn-s {
   border-top-right-radius: 3px;

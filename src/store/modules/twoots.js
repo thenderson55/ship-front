@@ -3,6 +3,7 @@ const state = {
   isLoggedIn: true,
   user: 1,
   userEmail:'frank@frank.com',
+  username: 'Frank',
   userToken: '',
   followingList: [],
   followingEmailList: [],
@@ -20,7 +21,8 @@ const getters = {
   followingList: state => state.followingList,
   twootsById: state => state.twootsById,
   user: state => state.user,
-  userEmail: state => state.userEmail
+  userEmail: state => state.userEmail,
+  username: state => state.username,
 
 };
 
@@ -235,6 +237,8 @@ const actions = {
                     id
                     user {
                       email
+                      username
+                      avatar
                     }
                   }
               }`,
@@ -251,17 +255,19 @@ const actions = {
       const content = res.data.createTwoot.content;
       const email = res.data.createTwoot.user.email;
       const id = res.data.createTwoot.id;
+      const username = res.data.createTwoot.user.username;
+      const avatar = res.data.createTwoot.user.avatar;
       const newTwoot = {
         content,
         id,
-        user: { email }
+        user: { email, username, avatar }
       };
-      state.myTwoots.push(newTwoot)
+      state.myFeed.push(newTwoot)
       // const myFeed = state.currentUserTwoots.concat(state.followersTwoots)
-      state.myTwoots.sort(function(a, b) { 
+      state.myFeed.sort(function(a, b) { 
         return b.id - a.id  
       });
-      commit('updateMyTwoots', state.myTwoots)
+      commit('updateMyFeed', state.myFeed)
     })
     .catch(err => {
       console.log(err);
@@ -352,7 +358,7 @@ const mutations = {
   updateTwoots: (state, twoots) => (state.followersTwoots = twoots),
   setFeed: (state, feed) => (state.myFeed = feed),
   updateFeed: (state, feed) => (state.myFeed = feed),
-  updateMyTwoots: (state, myTwoots) => (state.myTwoots = myTwoots),
+  updateMyFeed: (state, myTwoots) => (state.myTwoots = myTwoots),
   twootsById: (state, twootsById) => (state.twootsById = twootsById),
   addToEmailList: (state, addEmail) => (state.followingEmailList.push(addEmail)),
   removeFromEmailList: (state, removeEmail) => (state.followingEmailList.splice(removeEmail, 1)),

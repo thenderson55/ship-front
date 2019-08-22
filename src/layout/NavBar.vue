@@ -74,7 +74,7 @@ export default {
 
 <style scoped>
 .nav-bar {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .btn {
