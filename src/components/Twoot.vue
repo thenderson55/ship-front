@@ -31,7 +31,6 @@ export default {
     buttonText: String,
     followFunction: Function
   },
-
 }
 </script>
 
@@ -91,6 +90,11 @@ export default {
 
 .disable {
   display: none;
+}
+
+.follow:focus,.follow:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 </style>
