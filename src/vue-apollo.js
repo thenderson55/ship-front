@@ -1,7 +1,44 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { createApolloClient, restartWebsockets } from 'vue-cli-plugin-apollo/graphql-client'
+// import { InMemoryCache } from 'apollo-cache-inmemory';
+// import gql from 'graphql-tag'
 
+
+// export const typeDefs = gql`
+//   type Item {
+//     id: ID!
+//     text: String!
+//     done: Boolean!
+//   }
+//   type User {
+//     id: ID!
+//   },
+//   type Mutation {
+//     addUser($data: AUTH_PROVIDER_EMAIL!): User
+//     addItem(text: String!): Item
+//   }
+// `;
+
+// const cache = new InMemoryCache();
+
+// cache.writeData({
+//   data: {
+//     todoItems: [
+//       {
+//         __typename: 'Item',
+//         id: 'dqdBHJGgjgjg',
+//         text: 'test',
+//         done: true,
+//       },
+//     ],
+//     signinUser: [
+//       {
+//         id: ''
+//       }
+//     ]
+//   },
+// });
 // Install the vue plugin
 Vue.use(VueApollo)
 

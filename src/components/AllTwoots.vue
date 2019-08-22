@@ -1,5 +1,7 @@
 <template>
   <div class="body">
+    <h5>AllTwoots!</h5>
+
     <Twoot class="wrapper" v-for="twoot in allTwoots" :twoot="twoot" :buttonText="buttonText" :followFunction="addNewFollowing" :key="twoot.id"/>    
   </div>
 </template>

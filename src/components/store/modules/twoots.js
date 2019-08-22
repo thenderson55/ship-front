@@ -1,8 +1,8 @@
 
 const state = {
   isLoggedIn: true,
-  user: 1,
-  userEmail:'frank@frank.com',
+  user: 3,
+  userEmail:'kate@kate.com',
   userToken: '',
   followingList: [],
   followingEmailList: [],
@@ -25,6 +25,9 @@ const getters = {
 };
 
 const actions = {
+  updateUser({commit}, user) {
+    commit('setUserId', user)
+  },
   toggleLogin({commit}){
     console.log('toggle')
     console.log(!state.isLoggedIn)
@@ -48,7 +51,6 @@ const actions = {
                         email
                         id
                         username
-                        avatar
                       }
                   }
               }
@@ -86,7 +88,6 @@ const actions = {
                     email
                     id
                     username
-                    avatar
                   }
               }
           }`,
@@ -183,7 +184,7 @@ const actions = {
   async deleteFollowing({ commit }, email) {
     console.log('del', email)
     console.log('del',state.followingEmailList)
-    // if(!state.followingEmailList.includes(email)) return 
+    if(!state.followingEmailList.includes(email)) return 
     
     await fetch("http://localhost:3000/graphql/", {
       method: "POST",
@@ -284,7 +285,6 @@ const actions = {
                     email
                     id
                     username
-                    avatar
                   }
               }
           }`,

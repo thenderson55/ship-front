@@ -5,9 +5,11 @@
     <div>
       <div class="name" v-bind:class="{ 'center-avatar' : twoot.user.email == userEmail}" >
         <router-link :to="`/profile/${twoot.user.id}`" class="link">
-          <img src="https://randomuser.me/api/portraits/men/4.jpg" class="avatar">
-          {{twoot.user.id}}
-          {{twoot.user.email}}
+          <img v-bind:src="`${twoot.user.avatar}`" class="avatar">
+          <p>
+
+          {{twoot.user.username}}
+          </p>
         </router-link>
       </div>
       <button v-if="twoot.user.email !== userEmail" v-on:click="() => followFunction(twoot.user.email)" class="btn-s btn-success follow" v-text="buttonText"></button>
@@ -56,6 +58,7 @@ export default {
 }
 
 .link {
+  margin-top: 20px;
   text-align: center;
   color: white;
 }
