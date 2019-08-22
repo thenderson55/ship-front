@@ -11,13 +11,13 @@ import Twoot from './Twoot.vue'
 import gql from "graphql-tag";
 
 export default {
-  props: ['id'],
+  props: ['id', 'username'],
   components: {
     Twoot,
   },
   name: "Profile",
   computed:{
-    ...mapGetters(['twootsById', 'user', 'username'])
+    ...mapGetters(['twootsById', 'user'])
   }, 
   created(){
     this.getTwootsById(this.$props.id)

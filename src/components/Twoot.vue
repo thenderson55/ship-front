@@ -4,7 +4,8 @@
     <p class="form-control content" rows="3">{{twoot.content}}</p>
     <div>
       <div class="name" v-bind:class="{ 'center-avatar' : twoot.user.email == userEmail}" >
-        <router-link :to="`/profile/${twoot.user.id}`" class="link">
+        <!-- <router-link :to="`/profile/${twoot.user.id}`" class="link"> -->
+        <router-link :to="{ name: 'profile', params: {id: twoot.user.id, username: twoot.user.username } }" class="link">
           <img v-bind:src="`${twoot.user.avatar}`" class="avatar">
           <p>
 

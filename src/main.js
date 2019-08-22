@@ -19,7 +19,7 @@ const routes = [
   {path:'/signup', component: SignUp},
   {path:'/login', component: LogIn},
   {path:'/alltwoots', component: AllTwoots},
-  {path: '/profile/:id', component: Profile, props: true }
+  {path: '/profile/:id', name: 'profile', component: Profile, props: true }
 ]
 
 const router =  new VueRouter({
